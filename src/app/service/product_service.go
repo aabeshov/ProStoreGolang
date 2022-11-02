@@ -6,11 +6,11 @@ import (
 )
 
 type ProductService interface {
-	Save(model.Product) model.Product
-	FindAll() []model.Product
-	Update(product model.Product)
-	Delete(product model.Product)
-	Get(id int) (model.Product, error)
+	CreateProduct(model.Product) model.Product
+	FindAllProducts() []model.Product
+	UpdateProduct(product model.Product) error
+	DeleteProduct(product model.Product) error
+	GetProduct(id int) (model.Product, error)
 }
 
 type productService struct {
@@ -23,23 +23,33 @@ func New(repo repository.ProductRepository) ProductService {
 	}
 }
 
-func (service *productService) Save(product model.Product) model.Product {
-	service.productRepository.Save(product)
+//type Service struct {
+//	productRepository repository.ProductRepository
+//}
+//func New(repo repository.Repository) Service {
+//	return &Service{
+//		Repository: repo,
+//	}
+//}
+
+func (service *productService) CreateProduct(product model.Product) model.Product {
+	service.productRepository.CreateProduct(product)
 	return product
 }
 
-func (service *productService) FindAll() []model.Product {
-	return service.productRepository.FindAll()
+func (service *productService) FindAllProducts() []model.Product {
+	return service.productRepository.FindAllProducts()
 }
 
-func (service *productService) Update(product model.Product) {
-	service.productRepository.Update(product)
+func (service *productService) UpdateProduct(product model.Product) error {
+	return service.productRepository.UpdateProduct(product)
 }
 
-func (service *productService) Delete(product model.Product) {
-	service.productRepository.Delete(product)
+func (service *productService) DeleteProduct(product model.Product) error {
+	return service.productRepository.DeleteProduct(product)
+
 }
 
-func (service *productService) Get(id int) (model.Product, error) {
-	return service.productRepository.Get(id)
+func (service *productService) GetProduct(id int) (model.Product, error) {
+	return service.productRepository.GetProduct(id)
 }

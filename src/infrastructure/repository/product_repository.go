@@ -2,48 +2,36 @@ package repository
 
 import (
 	model "GolangwithFrame/src/domain/model"
-	"fmt"
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "admin12345"
-	dbname   = "postgres"
-)
+//
+//const (
+//	host     = "localhost"
+//	port     = 5432
+//	user     = "postgres"
+//	password = "admin12345"
+//	dbname   = "postgres"
+//)
 
 type ProductRepository interface {
-	Save(product model.Product)
-	Update(product model.Product)
-	Delete(product model.Product)
-	FindAll() []model.Product
+	CreateProduct(product model.Product)
+	UpdateProduct(product model.Product) error
+	DeleteProduct(product model.Product) error
+	FindAllProducts() []model.Product
 	CloseDB()
-	Get(id int) (model.Product, error)
+	GetProduct(id int) (model.Product, error)
 	//Get(product model.Product) model.Product
 }
 
-type database struct {
-	connection *gorm.DB
-}
-
-func NewProductRepository() ProductRepository {
-
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-	db, err := gorm.Open("postgres", psqlInfo)
-	if err != nil {
-		panic("Can't connect to database")
-	}
-	db.AutoMigrate(&model.Token{}, &model.User{}, &model.Product{}, &model.Category{})
-	return &database{
-		connection: db,
-	}
-
-}
+//func NewProductRepository() ProductRepository {
+//
+//	db := NewDB()
+//	return &database{
+//		connection: db,
+//	}
+//
+//}
 
 func (db *database) CloseDB() {
 	err := db.connection.Close()
@@ -53,31 +41,46 @@ func (db *database) CloseDB() {
 
 }
 
-func (db *database) Get(id int) (model.Product, error) {
+func (db *database) GetProduct(id int) (model.Product, error) {
 	product := model.Product{}
-	db.connection.Where("id = ?", id).First(&product)
-	//if err != nil {
-	//	panic("error")
-	//}
-	return product, nil
+	err := db.connection.Where("id = ?", id).First(&product).Error
+	if err != nil {
+		return product, err
+	} else {
+		return product, nil
+	}
 	//db.connection.First()
 	//db.connection.First(&prod, "id=?", product.Id)
 	////db.connection.Where("name = ?", "jinzhu").First(&product)
 	//return db.connection.First(&prod, "id=?", product.Id), nil
 }
 
-func (db *database) Save(product model.Product) {
+func (db *database) CreateProduct(product model.Product) {
 	db.connection.Create(&product)
 }
-func (db *database) Update(product model.Product) {
+func (db *database) UpdateProduct(product model.Product) error {
+	currentProduct := model.Product{}
+
+	err := db.connection.Where("id = ?", product.Id).First(&currentProduct).Error
+	//fmt.Println(err)
+	//db.connection.Save(&product)
+	//db.connection.Where("id = ?", product.Id).First(&product).Error
+	if err != nil {
+		return db.connection.Where("id = ?", product.Id).First(&currentProduct).Error
+	}
 	db.connection.Save(&product)
+	return nil
+	//return nil
+
 }
-func (db *database) Delete(product model.Product) {
+func (db *database) DeleteProduct(product model.Product) error {
+	err := db.connection.Where("id = ?", product.Id).First(&product).Error
 	db.connection.Delete(&product)
+	return err
 }
-func (db *database) FindAll() []model.Product {
+func (db *database) FindAllProducts() []model.Product {
 	var products []model.Product
-	db.connection.Set("gorm:auto_preload", true).Find(&products)
+	db.connection.Set("gorm:auto_preload", true).Order("id").Find(&products)
 	return products
 }
 
