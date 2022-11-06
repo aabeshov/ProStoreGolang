@@ -2,7 +2,6 @@ package service
 
 import (
 	"GolangwithFrame/src/domain/model"
-	"GolangwithFrame/src/infrastructure/repository"
 )
 
 type ProductService interface {
@@ -13,18 +12,8 @@ type ProductService interface {
 	GetProduct(id int) (model.Product, error)
 }
 
-type productService struct {
-	productRepository repository.ProductRepository
-}
-
-func New(repo repository.ProductRepository) ProductService {
-	return &productService{
-		productRepository: repo,
-	}
-}
-
 //type Service struct {
-//	productRepository repository.ProductRepository
+//	Repository repository.ProductRepository
 //}
 //func New(repo repository.Repository) Service {
 //	return &Service{
@@ -32,24 +21,24 @@ func New(repo repository.ProductRepository) ProductService {
 //	}
 //}
 
-func (service *productService) CreateProduct(product model.Product) model.Product {
-	service.productRepository.CreateProduct(product)
+func (service *Service) CreateProduct(product model.Product) model.Product {
+	service.Repository.CreateProduct(product)
 	return product
 }
 
-func (service *productService) FindAllProducts() []model.Product {
-	return service.productRepository.FindAllProducts()
+func (service *Service) FindAllProducts() []model.Product {
+	return service.Repository.FindAllProducts()
 }
 
-func (service *productService) UpdateProduct(product model.Product) error {
-	return service.productRepository.UpdateProduct(product)
+func (service *Service) UpdateProduct(product model.Product) error {
+	return service.Repository.UpdateProduct(product)
 }
 
-func (service *productService) DeleteProduct(product model.Product) error {
-	return service.productRepository.DeleteProduct(product)
+func (service *Service) DeleteProduct(product model.Product) error {
+	return service.Repository.DeleteProduct(product)
 
 }
 
-func (service *productService) GetProduct(id int) (model.Product, error) {
-	return service.productRepository.GetProduct(id)
+func (service *Service) GetProduct(id int) (model.Product, error) {
+	return service.Repository.GetProduct(id)
 }

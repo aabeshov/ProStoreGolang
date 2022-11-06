@@ -27,65 +27,57 @@ type ProductRepository interface {
 //func NewProductRepository() ProductRepository {
 //
 //	db := NewDB()
-//	return &database{
-//		connection: db,
+//	return &Database{
+//		Connection: db,
 //	}
 //
 //}
 
-func (db *database) CloseDB() {
-	err := db.connection.Close()
-	if err != nil {
-		panic("Failed to Connect")
-	}
-
-}
-
-func (db *database) GetProduct(id int) (model.Product, error) {
+func (db *Database) GetProduct(id int) (model.Product, error) {
 	product := model.Product{}
-	err := db.connection.Where("id = ?", id).First(&product).Error
+	err := db.Connection.Where("id = ?", id).First(&product).Error
 	if err != nil {
 		return product, err
 	} else {
 		return product, nil
 	}
-	//db.connection.First()
-	//db.connection.First(&prod, "id=?", product.Id)
-	////db.connection.Where("name = ?", "jinzhu").First(&product)
-	//return db.connection.First(&prod, "id=?", product.Id), nil
+	//db.Connection.First()
+	//db.Connection.First(&prod, "id=?", product.Id)
+	////db.Connection.Where("name = ?", "jinzhu").First(&product)
+	//return db.Connection.First(&prod, "id=?", product.Id), nil
 }
 
-func (db *database) CreateProduct(product model.Product) {
-	db.connection.Create(&product)
+func (db *Database) CreateProduct(product model.Product) {
+	db.Connection.Create(&product)
 }
-func (db *database) UpdateProduct(product model.Product) error {
+func (db *Database) UpdateProduct(product model.Product) error {
 	currentProduct := model.Product{}
 
-	err := db.connection.Where("id = ?", product.Id).First(&currentProduct).Error
+	err := db.Connection.Where("id = ?", product.Id).First(&currentProduct).Error
 	//fmt.Println(err)
-	//db.connection.Save(&product)
-	//db.connection.Where("id = ?", product.Id).First(&product).Error
+	//db.Connection.Save(&product)
+	//db.Connection.Where("id = ?", product.Id).First(&product).Error
 	if err != nil {
-		return db.connection.Where("id = ?", product.Id).First(&currentProduct).Error
+		return db.Connection.Where("id = ?", product.Id).First(&currentProduct).Error
 	}
-	db.connection.Save(&product)
+	db.Connection.Save(&product)
 	return nil
 	//return nil
 
 }
-func (db *database) DeleteProduct(product model.Product) error {
-	err := db.connection.Where("id = ?", product.Id).First(&product).Error
-	db.connection.Delete(&product)
+func (db *Database) DeleteProduct(product model.Product) error {
+	err := db.Connection.Where("id = ?", product.Id).First(&product).Error
+	db.Connection.Delete(&product)
 	return err
 }
-func (db *database) FindAllProducts() []model.Product {
+func (db *Database) FindAllProducts() []model.Product {
 	var products []model.Product
-	db.connection.Set("gorm:auto_preload", true).Order("id").Find(&products)
+	db.Connection.Set("gorm:auto_preload", true).Order("id").Find(&products)
 	return products
 }
 
 //
-//func (db *database) Get(id uint64) {
+//func (db *Database) Get(id uint64) {
 //	var product model.Product
 //	return
 //}

@@ -14,15 +14,23 @@ const (
 	dbname   = "postgres"
 )
 
-type database struct {
-	connection *gorm.DB
+type Database struct {
+	Connection *gorm.DB
 }
 
-func NewRepository() ProductRepository {
+func NewRepository() Database {
 
 	db := NewDB()
-	return &database{
-		connection: db,
+	return Database{
+		Connection: db,
+	}
+
+}
+
+func (db *Database) CloseDB() {
+	err := db.Connection.Close()
+	if err != nil {
+		panic("Failed to Connect")
 	}
 
 }
