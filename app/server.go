@@ -4,6 +4,7 @@ import (
 	"GolangwithFrame/app/controller"
 	middleware2 "GolangwithFrame/app/middleware"
 	"GolangwithFrame/src/app/service"
+	"GolangwithFrame/src/infrastructure/localvariables"
 	"GolangwithFrame/src/infrastructure/repository"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -19,15 +20,22 @@ var (
 	//controller controller.ProductController = controller.New(Service)
 )
 
+func init() {
+	localvariables.LoadEnvVariables()
+}
+
 func main() {
 	defer Repository.CloseDB()
-	server := gin.Default()
+	server := gin.New()
 	server.Use(
 		gin.Recovery(),
 		middleware2.Logger(),
-		middleware2.BasicAuth(),
+		//middleware2.BasicAuth(),
 	)
+
 	products := server.Group("/products")
+
+	products.Use(middleware2.RequireAuth)
 	{
 		products.GET("", controller.FindAllProducts)
 		products.POST("", controller.CreateProduct)
@@ -35,14 +43,25 @@ func main() {
 		products.PUT("/:id", controller.UpdateProduct)
 		products.DELETE("/:id", controller.DeleteProduct)
 	}
+
 	category := server.Group("/category")
+	category.Use(middleware2.RequireAuth)
 	{
+
 		category.GET("", controller.FindAllCategory)
 		category.GET("/:id/products", controller.FindProductsByCategory)
 		category.POST("", controller.CreateCategory)
 		category.GET("/:id", controller.GetCategory)
 		category.PUT("/:id", controller.UpdateCategory)
 		category.DELETE("/:id", controller.DeleteCategory)
+	}
+
+	users := server.Group("/account")
+	{
+		users.POST("/signup", controller.SignUp)
+		users.POST("/login", controller.Login)
+		users.GET("/validate", middleware2.RequireAuth, controller.Validate)
+
 	}
 
 	server.Run(":8080")

@@ -19,7 +19,6 @@ type ProductRepository interface {
 	UpdateProduct(product model.Product) error
 	DeleteProduct(product model.Product) error
 	FindAllProducts() []model.Product
-	CloseDB()
 	GetProduct(id int) (model.Product, error)
 	//Get(product model.Product) model.Product
 }

@@ -1,9 +1,6 @@
 package model
 
-import "github.com/jinzhu/gorm"
-
 type User struct {
-	gorm.Model
-	login    string `gorm:"unique"`
-	password string
+	Login    string `gorm:"type:varchar;primary_key;unique;NOT NULL" json:"login"`
+	Password string `json:"password"`
 }
