@@ -26,16 +26,16 @@ func init() {
 
 func main() {
 	defer Repository.CloseDB()
-	server := gin.New()
+	//server := gin.New()
+	server := gin.Default()
 	server.Use(
-		gin.Recovery(),
-		middleware2.Logger(),
+		//gin.Recovery(),
+		//middleware2.Logger(),
 		//middleware2.BasicAuth(),
 	)
 
-	products := server.Group("/products")
-
-	products.Use(middleware2.RequireAuth)
+	products := server.Group("/products", middleware2.RequireAuth)
+	//products.Use(middleware2.RequireAuth)
 	{
 		products.GET("", controller.FindAllProducts)
 		products.POST("", controller.CreateProduct)
@@ -44,8 +44,8 @@ func main() {
 		products.DELETE("/:id", controller.DeleteProduct)
 	}
 
-	category := server.Group("/category")
-	category.Use(middleware2.RequireAuth)
+	category := server.Group("/category", middleware2.RequireAuth)
+	//category.Use(middleware2.RequireAuth)
 	{
 
 		category.GET("", controller.FindAllCategory)
