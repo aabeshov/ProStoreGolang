@@ -3,6 +3,7 @@ package Controller
 import (
 	_ "GolangwithFrame/src/app/service"
 	"GolangwithFrame/src/domain/model"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -76,20 +77,29 @@ func (c *Controller) DeleteProduct(ctx *gin.Context) {
 }
 
 func (c *Controller) GetProduct(ctx *gin.Context) {
-	var product model.Product
+	var product *model.Product
 	ProductId := ctx.Param("id")
 	ProductIdInt, err := strconv.Atoi(ProductId)
 	if err != nil {
 		ctx.JSON(404, gin.H{"message": "Used invalid ID"})
 		return
 	}
-	ctx.ShouldBindJSON(&product)
-	prod, err := c.service.GetProduct(ProductIdInt)
-	if err != nil {
-		ctx.JSON(404, gin.H{"message": "There is no object with this ID"})
-		return
-	}
-	ctx.JSON(200, gin.H{"message": prod})
-	//fmt.Println(err, err.Error())
+	product = c.cache.Get(ProductId)
+	//fmt.Println(product)
+	if product == nil {
+		fmt.Println("condition 1 (NOT IN CACHE)")
+		ctx.ShouldBindJSON(&product)
+		prod, err := c.service.GetProduct(ProductIdInt)
+		if err != nil {
+			ctx.JSON(404, gin.H{"message": "There is no object with this ID"})
+			return
+		}
+		c.cache.Set(ProductId, &prod)
 
+		ctx.JSON(200, gin.H{"message": prod})
+		//fmt.Println(err)
+	} else {
+		fmt.Println("condition 2 (FOUND IN CACHE)")
+		ctx.JSON(200, gin.H{"message": product})
+	}
 }

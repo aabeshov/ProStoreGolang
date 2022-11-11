@@ -6,17 +6,18 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+type Database struct {
+	Connection *gorm.DB
+}
+
 const (
+	// Local DB
 	host     = "localhost"
 	port     = 5432
 	user     = "postgres"
 	password = "admin12345"
 	dbname   = "postgres"
 )
-
-type Database struct {
-	Connection *gorm.DB
-}
 
 func NewRepository() Database {
 
@@ -36,7 +37,7 @@ func (db *Database) CloseDB() {
 }
 
 func NewDB() *gorm.DB {
-
+	//fmt.Println(os.Getenv("LOCAL_DB_USER"))
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)

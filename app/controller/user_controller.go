@@ -3,6 +3,7 @@ package Controller
 import (
 	_ "GolangwithFrame/src/app/service"
 	"GolangwithFrame/src/domain/model"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -136,6 +137,7 @@ func (c *Controller) Login(ctx *gin.Context) {
 
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	fmt.Println(os.Getenv("SECRET"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error()})

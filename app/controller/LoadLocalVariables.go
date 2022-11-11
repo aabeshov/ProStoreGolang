@@ -1,4 +1,4 @@
-package localvariables
+package Controller
 
 import (
 	"fmt"
@@ -11,9 +11,11 @@ import (
 func LoadEnvVariables() {
 
 	dir, err := os.Getwd()
-	fmt.Println(dir)
 
-	err = godotenv.Load(filepath.Join(dir, ".env"))
+	err = godotenv.Load(filepath.Join(dir+"/..", ".env"))
+	fmt.Println(dir)
+	fmt.Println(os.Getenv("REDIS_PORT"))
+	//fmt.Println(dir + "/..")
 	//err := godotenv.Load()
 
 	if err != nil {

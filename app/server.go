@@ -4,34 +4,55 @@ import (
 	"GolangwithFrame/app/controller"
 	middleware2 "GolangwithFrame/app/middleware"
 	"GolangwithFrame/src/app/service"
-	"GolangwithFrame/src/infrastructure/localvariables"
+	"GolangwithFrame/src/infrastructure/cache"
 	"GolangwithFrame/src/infrastructure/repository"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
+	"os"
 )
 
 var (
-	Repository = repository.NewRepository()
-	Service    = service.New(Repository)
-	controller = Controller.New(*Service)
+//Host     = os.Getenv("LOCAL_DB_HOST")
+//Port     = os.Getenv("LOCAL_DB_PORT")
+//User     = os.Getenv("LOCAL_DB_USER")
+//Password = os.Getenv("LOCAL_DB_PASSWORD")
+//Dbname   = os.Getenv("LOCAL_DB_DBNAME")
 
-	//Repository repository.ProductRepository = repository.New()
-	//Service    service.SER                  = service.New(Repository)
-	//controller controller.ProductController = controller.New(Service)
+//
+//	Cache 			= cache.NewRedisCache("localhost:6379, 0, 15)
+//	Repository	 	= repository.NewRepository()
+//	Service 		= service.New(Repository)
+//	controller	 	= Controller.New(*Service, Cache)
+
+// Repository repository.ProductRepository = repository.New()
+// Service    service.SER                  = service.New(Repository)
+// controller controller.ProductController = controller.New(Service)
 )
 
 func init() {
-	localvariables.LoadEnvVariables()
+	Controller.LoadEnvVariables()
+
+	//REDIS_HOST := os.Getenv("REDIS_HOST")
+	//REDIS_PORT := os.Getenv("REDIS_PORT")
 }
 
 func main() {
+	// Loading variables from Environment
+	REDIS_HOST := os.Getenv("REDIS_HOST")
+	REDIS_PORT := os.Getenv("REDIS_PORT")
+
+	Cache := cache.NewRedisCache(REDIS_HOST+":"+REDIS_PORT, 0, 15)
+	Repository := repository.NewRepository()
+	Service := service.New(Repository)
+	controller := Controller.New(*Service, Cache)
+
 	defer Repository.CloseDB()
 	//server := gin.New()
 	server := gin.Default()
 	server.Use(
-		//gin.Recovery(),
-		//middleware2.Logger(),
-		//middleware2.BasicAuth(),
+	//gin.Recovery(),
+	//middleware2.Logger(),
+	//middleware2.BasicAuth(),
 	)
 
 	products := server.Group("/products", middleware2.RequireAuth)

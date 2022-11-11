@@ -36,7 +36,7 @@ func RequireAuth(ctx *gin.Context) {
 
 		var user model.User
 		repository.NewRepository().Connection.First(&user).Where("login=?", claims["subject"])
-		fmt.Println(user)
+		//fmt.Println(user)
 		if user.Login == "" {
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
