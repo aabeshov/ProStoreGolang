@@ -12,7 +12,7 @@ type Database struct {
 
 const (
 	// Local DB
-	host     = "localhost"
+	host     = "db"
 	port     = 5432
 	user     = "postgres"
 	password = "admin12345"

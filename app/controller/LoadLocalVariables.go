@@ -12,9 +12,9 @@ func LoadEnvVariables() {
 
 	dir, err := os.Getwd()
 
-	err = godotenv.Load(filepath.Join(dir+"/..", ".env"))
-	fmt.Println(dir)
-	fmt.Println(os.Getenv("REDIS_PORT"))
+	err = godotenv.Load(filepath.Join(dir, ".env"))
+	//fmt.Println(dir)
+	//fmt.Println(os.Getenv("REDIS_PORT"))
 	//fmt.Println(dir + "/..")
 	//err := godotenv.Load()
 

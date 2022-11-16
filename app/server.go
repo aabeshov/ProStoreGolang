@@ -8,7 +8,6 @@ import (
 	"GolangwithFrame/src/infrastructure/repository"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
-	"os"
 )
 
 var (
@@ -38,10 +37,10 @@ func init() {
 
 func main() {
 	// Loading variables from Environment
-	REDIS_HOST := os.Getenv("REDIS_HOST")
-	REDIS_PORT := os.Getenv("REDIS_PORT")
+	//REDIS_HOST := os.Getenv("REDIS_HOST")
+	//REDIS_PORT := os.Getenv("REDIS_PORT")
 
-	Cache := cache.NewRedisCache(REDIS_HOST+":"+REDIS_PORT, 0, 15)
+	Cache := cache.NewRedisCache("redis:6379", 0, 15)
 	Repository := repository.NewRepository()
 	Service := service.New(Repository)
 	controller := Controller.New(*Service, Cache)

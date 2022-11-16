@@ -64,7 +64,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\":\"hello2\",\n    \"description\":\"teST\",\n    \"category_id\":2\n}",
+							"raw": "{\n    \"name\":\"hello2\",\n    \"description\":\"teST\",\n    \"category_id\":1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -267,7 +267,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\n    \"name\":\"Category 15\"\n}",
+							"raw": "{\n\n    \"name\":\"Category 3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -320,13 +320,13 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/products/1",
+							"raw": "localhost:8080/category/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"products",
+								"category",
 								"1"
 							]
 						}
@@ -339,14 +339,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/category/2/products",
+							"raw": "localhost:8080/category/1/products",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"category",
-								"2",
+								"1",
 								"products"
 							]
 						}
@@ -390,26 +390,11 @@
 				{
 					"name": "Update Category by ID",
 					"request": {
-						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "reviews",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "pragmatic",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\":\"testil22o\"\n}",
+							"raw": "{\n    \"name\":\"test\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
