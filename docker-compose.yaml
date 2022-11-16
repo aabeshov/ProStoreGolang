@@ -19,7 +19,7 @@ services:
   redis:
     image: redis:latest
     volumes:
-      - ./data:/data
+      - /var/lib/redis/data:/var/lib/redis/data
     ports:
       - 6379:6379
 
