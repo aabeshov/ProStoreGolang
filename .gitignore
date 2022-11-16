@@ -1,6 +1,4 @@
 .idea
 .env
 .git
-main.go
-tester.go
 .DS_Store
