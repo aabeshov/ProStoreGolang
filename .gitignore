@@ -3,3 +3,4 @@
 .git
 main.go
 tester.go
+.DS_Store
