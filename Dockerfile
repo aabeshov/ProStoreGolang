@@ -16,7 +16,7 @@ RUN go build -o server ./app/server.go
 
 #FROM alpine:latest
 #RUN apk --no-cache add ca-certificates libc6-compat
-#WORKDIR /GolangwithFrame/
-#COPY --from=build-stage /GolangwithFrame/app-start .
+#WORKDIR /ProStoreGolang/
+#COPY --from=build-stage /ProStoreGolang/app-start .
 CMD [ "./server" ]
 

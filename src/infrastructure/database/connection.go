@@ -2,7 +2,7 @@ package database
 
 //
 //import (
-//	"GolangwithFrame/src/domain/model"
+//	"ProStoreGolang/src/domain/model"
 //	"fmt"
 //	"github.com/jinzhu/gorm"
 //	"time"
