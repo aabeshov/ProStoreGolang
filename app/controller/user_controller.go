@@ -20,6 +20,7 @@ type UserController interface {
 	//GetUser(ctx *gin.Context)
 	SignUp(ctx *gin.Context)
 	Login(ctx *gin.Context)
+	Validate(ctx *gin.Context)
 }
 
 //func (c *Controller) FindAllUsers(ctx *gin.Context) {

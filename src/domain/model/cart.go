@@ -1,9 +1,9 @@
 package model
 
 type Cart struct {
-	Product   Product `gorm:"foreignkey:ProductID" json:"-"`
 	ProductID uint    `gorm:"NOT NULL" json:"product_id"`
-	User      User    `gorm:"foreignkey:UserID"`
-	UserID    uint    `gorm:"NOT NULL" json:"used_id"`
+	Product   Product `gorm:"foreignkey:ProductID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;references:Id" json:"-"`
+	UserLogin string  `gorm:"NOT NULL" json:"user_login"`
+	User      User    `gorm:"foreignkey:UserLogin;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;references:Login" json:"-"`
 	Quantity  uint    `gorm:"type:integer;default:0" json:"quantity"`
 }

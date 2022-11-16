@@ -8,6 +8,7 @@ import (
 	"GolangwithFrame/src/infrastructure/repository"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
+	"os"
 )
 
 var (
@@ -29,18 +30,16 @@ var (
 )
 
 func init() {
-	Controller.LoadEnvVariables()
+	middleware2.LoadEnvVariables()
 
-	//REDIS_HOST := os.Getenv("REDIS_HOST")
-	//REDIS_PORT := os.Getenv("REDIS_PORT")
 }
 
 func main() {
 	// Loading variables from Environment
-	//REDIS_HOST := os.Getenv("REDIS_HOST")
-	//REDIS_PORT := os.Getenv("REDIS_PORT")
+	REDIS_HOST := os.Getenv("REDIS_HOST")
+	REDIS_PORT := os.Getenv("REDIS_PORT")
 
-	Cache := cache.NewRedisCache("redis:6379", 0, 15)
+	Cache := cache.NewRedisCache(REDIS_HOST+":"+REDIS_PORT, 0, 60)
 	Repository := repository.NewRepository()
 	Service := service.New(Repository)
 	controller := Controller.New(*Service, Cache)
@@ -74,6 +73,15 @@ func main() {
 		category.GET("/:id", controller.GetCategory)
 		category.PUT("/:id", controller.UpdateCategory)
 		category.DELETE("/:id", controller.DeleteCategory)
+	}
+
+	cart := server.Group("/cart", middleware2.RequireAuth)
+	{
+
+		cart.GET("", controller.FindAllCarts)
+		cart.GET("/:user_login", controller.GetUserCart)
+		cart.POST("", controller.CreateCart)
+		cart.DELETE("/:user_login", controller.DeleteCart)
 	}
 
 	users := server.Group("/account")

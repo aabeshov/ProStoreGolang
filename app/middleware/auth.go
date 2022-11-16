@@ -42,6 +42,7 @@ func RequireAuth(ctx *gin.Context) {
 			return
 		}
 		ctx.Set("user", user)
+		ctx.Set("userlogin", user.Login)
 		ctx.Next()
 
 	} else {

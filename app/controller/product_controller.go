@@ -25,7 +25,7 @@ func (c *Controller) FindAllProducts(ctx *gin.Context) {
 func (c *Controller) CreateProduct(ctx *gin.Context) {
 	var product model.Product
 	err := ctx.ShouldBindJSON(&product)
-	//fmt.Println(product)
+	fmt.Println(product)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
