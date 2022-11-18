@@ -3,7 +3,6 @@ package Controller
 import (
 	_ "GolangwithFrame/src/app/service"
 	"GolangwithFrame/src/domain/model"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -23,7 +22,7 @@ func (c *Controller) FindAllCarts(ctx *gin.Context) {
 func (c *Controller) CreateCart(ctx *gin.Context) {
 	var cart model.Cart
 	err := ctx.ShouldBindJSON(&cart)
-	fmt.Println(cart)
+	//fmt.Println(cart)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

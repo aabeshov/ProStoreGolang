@@ -1,5 +1,5 @@
 FROM golang:latest as build-stage
-WORKDIR /GolangwithFrame
+WORKDIR /ProStoreGolang
 #COPY ./ ./
 COPY go.* .
 COPY . .

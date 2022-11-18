@@ -45,7 +45,7 @@ func NewDB() *gorm.DB {
 	if err != nil {
 		panic("Can't connect to database")
 	}
-	db.AutoMigrate(&model.Token{}, &model.User{}, &model.Product{}, &model.Category{}, &model.Cart{})
+	db.AutoMigrate(&model.User{}, &model.Product{}, &model.Category{}, &model.Cart{})
 
 	return db
 }

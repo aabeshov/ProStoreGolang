@@ -11,10 +11,7 @@ services:
       - redis
     environment:
       - POSTGRES_PASSWORD=admin12345
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - REDIS_HOST = localhost
-      - REDIS_PORT = 6379
+
 
   redis:
     image: redis:latest
@@ -29,10 +26,8 @@ services:
     restart: always
     image: postgres:latest
     volumes:
-      - /var/lib/postgresql/data/ :/var/lib/postgresql/data/
+      - /var/lib/postgres/data:/var/lib/postgres/data
     environment:
       - POSTGRES_PASSWORD=admin12345
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
     ports:
       - 5436:5432
