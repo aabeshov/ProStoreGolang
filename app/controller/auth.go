@@ -1,8 +1,7 @@
-package middleware
+package Controller
 
 import (
 	"GolangwithFrame/src/domain/model"
-	"GolangwithFrame/src/infrastructure/repository"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -11,7 +10,7 @@ import (
 	"time"
 )
 
-func RequireAuth(ctx *gin.Context) {
+func (c *Controller) RequireAuth(ctx *gin.Context) {
 	tokenString, err := ctx.Cookie("Authorization")
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusUnauthorized)
@@ -35,13 +34,16 @@ func RequireAuth(ctx *gin.Context) {
 		}
 
 		var user model.User
-		repository.NewRepository().Connection.First(&user).Where("login=?", claims["subject"])
+		//fmt.Println(claims["subject"])
+		user, _ = c.service.GetUser(claims["subject"].(string))
+
 		//fmt.Println(user)
 		if user.Login == "" {
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
 		ctx.Set("user", user)
+
 		ctx.Set("userlogin", user.Login)
 		ctx.Next()
 

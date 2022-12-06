@@ -8,7 +8,6 @@ import (
 	"GolangwithFrame/src/infrastructure/repository"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
-	"os"
 )
 
 var (
@@ -36,10 +35,10 @@ func init() {
 
 func main() {
 	// Loading variables from Environment
-	REDIS_HOST := os.Getenv("REDIS_HOST")
-	REDIS_PORT := os.Getenv("REDIS_PORT")
+	//REDIS_HOST := os.Getenv("REDIS_HOST")
+	//REDIS_PORT := os.Getenv("REDIS_PORT")
 
-	Cache := cache.NewRedisCache(REDIS_HOST+":"+REDIS_PORT, 0, 60)
+	Cache := cache.NewRedisCache("redis:6379", 0, 60)
 	Repository := repository.NewRepository()
 	Service := service.New(Repository)
 	controller := Controller.New(*Service, Cache)
@@ -53,7 +52,7 @@ func main() {
 	//middleware2.BasicAuth(),
 	)
 
-	products := server.Group("/products", middleware2.RequireAuth)
+	products := server.Group("/products", controller.RequireAuth)
 	//products.Use(middleware2.RequireAuth)
 	{
 		products.GET("", controller.FindAllProducts)
@@ -63,7 +62,7 @@ func main() {
 		products.DELETE("/:id", controller.DeleteProduct)
 	}
 
-	category := server.Group("/category", middleware2.RequireAuth)
+	category := server.Group("/category", controller.RequireAuth)
 	//category.Use(middleware2.RequireAuth)
 	{
 
@@ -75,7 +74,7 @@ func main() {
 		category.DELETE("/:id", controller.DeleteCategory)
 	}
 
-	cart := server.Group("/cart", middleware2.RequireAuth)
+	cart := server.Group("/cart", controller.RequireAuth)
 	{
 
 		cart.GET("", controller.FindAllCarts)
@@ -88,7 +87,7 @@ func main() {
 	{
 		users.POST("/signup", controller.SignUp)
 		users.POST("/login", controller.Login)
-		users.GET("/validate", middleware2.RequireAuth, controller.Validate)
+		users.GET("/validate", controller.RequireAuth, controller.Validate)
 
 	}
 

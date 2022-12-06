@@ -22,6 +22,9 @@ func (c *Controller) FindAllCarts(ctx *gin.Context) {
 func (c *Controller) CreateCart(ctx *gin.Context) {
 	var cart model.Cart
 	err := ctx.ShouldBindJSON(&cart)
+	strlogin, _ := ctx.Get("userlogin")
+	strlogin1 := strlogin.(string)
+	cart.UserLogin = strlogin1
 	//fmt.Println(cart)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -53,5 +56,4 @@ func (c *Controller) GetUserCart(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, carts)
-
 }

@@ -3,6 +3,7 @@ package Controller
 import (
 	_ "GolangwithFrame/src/app/service"
 	"GolangwithFrame/src/domain/model"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -66,18 +67,18 @@ type UserController interface {
 //	}
 //	ctx.JSON(http.StatusOK, gin.H{"message": "User was deleted!"})
 //}
-//
-//func (c *Controller) GetUser(ctx *gin.Context) {
-//	var user model.User
-//	UserLogin := ctx.Param("login")
-//	ctx.ShouldBindJSON(&user)
-//	prod, err := c.service.GetUser(UserLogin)
-//	if err != nil {
-//		ctx.JSON(404, gin.H{"message": "There is no object with this Login"})
-//		return
-//	}
-//	ctx.JSON(200, gin.H{"message": prod})
-//}
+
+func (c *Controller) GetUser(ctx *gin.Context) {
+	var user model.User
+	UserLogin := ctx.Param("login")
+	ctx.ShouldBindJSON(&user)
+	prod, err := c.service.GetUser(UserLogin)
+	if err != nil {
+		ctx.JSON(404, gin.H{"message": "There is no object with this Login"})
+		return
+	}
+	ctx.JSON(200, gin.H{"message": prod})
+}
 
 func (c *Controller) SignUp(ctx *gin.Context) {
 	var cur_user model.User
@@ -89,8 +90,8 @@ func (c *Controller) SignUp(ctx *gin.Context) {
 			"error": "Failed to read body!"})
 		return
 	}
-	//fmt.Println(body.Login)
-	//fmt.Println(body.Password)
+	fmt.Println(cur_user.Login)
+	fmt.Println(cur_user.Password)
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(cur_user.Password), 10)
 	if err != nil {
@@ -152,7 +153,9 @@ func (c *Controller) Login(ctx *gin.Context) {
 
 func (c *Controller) Validate(ctx *gin.Context) {
 	user, _ := ctx.Get("user")
-
+	userlogin, _ := ctx.Get("userlogin")
+	str_login := userlogin.(string)
+	fmt.Println(str_login)
 	ctx.JSON(http.StatusAccepted, gin.H{
 		"message": user,
 	})

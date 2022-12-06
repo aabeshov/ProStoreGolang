@@ -15,13 +15,19 @@ type UserRepository interface {
 
 func (db *Database) GetUser(login string) (model.User, error) {
 	user := model.User{}
-	err := db.Connection.Where("Login = ?", login).First(&user).Error
-	if err != nil {
-		return user, err
-	} else {
-		return user, nil
-	}
-
+	db.Connection.Where("login = ?", login).First(&user)
+	//fmt.Println(user)
+	//fmt.Println(err)
+	//fmt.Println(err)
+	//if err != nil {
+	//	fmt.Println(user)
+	//	return user, err
+	//
+	//} else {
+	//	//fmt.Println(user)
+	//	return user, nil
+	//}
+	return user, nil
 }
 
 func (db *Database) CreateUser(user model.User) {
